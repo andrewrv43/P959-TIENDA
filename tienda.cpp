@@ -47,6 +47,128 @@ void Tienda::calcular(float subtotal)
     ui->outTotal->setText("$ "+QString::number(total,'f',2));
 }
 
+bool Tienda::verificarCedula(QString as)
+{
+    if(as=="1722225461"){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+void Tienda::checkVacios()
+{
+    //verificar si estan correctos o vacios para pintar el background
+    //cedula
+    if(verificarCedula(ui->inCedula->text())==false){
+        QPalette palette=ui->inCedula->palette();
+        palette.setColor(ui->inCedula->backgroundRole(),Qt::red);
+        palette.setColor(ui->inCedula->foregroundRole(),Qt::black);
+        ui->inCedula->setPalette(palette);
+
+    }
+    else{
+        QPalette palette=ui->inCedula->palette();
+        palette.setColor(ui->inCedula->backgroundRole(),Qt::green);
+        palette.setColor(ui->inCedula->foregroundRole(),Qt::black);
+        ui->inCedula->setPalette(palette);
+    }
+    //nombre
+    if(ui->inNom->text().isEmpty()){
+        QPalette palette=ui->inNom->palette();
+        palette.setColor(ui->inNom->backgroundRole(),Qt::red);
+        palette.setColor(ui->inNom->foregroundRole(),Qt::black);
+        ui->inNom->setPalette(palette);
+    }
+    else{
+        QPalette palette=ui->inNom->palette();
+        palette.setColor(ui->inNom->backgroundRole(),Qt::green);
+        palette.setColor(ui->inNom->foregroundRole(),Qt::black);
+        ui->inNom->setPalette(palette);
+    }
+    //telefono
+    if(ui->inTelf->text().isEmpty()){
+        QPalette palette=ui->inTelf->palette();
+        palette.setColor(ui->inTelf->backgroundRole(),Qt::red);
+        palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
+        ui->inTelf->setPalette(palette);
+    }
+    else{
+        QPalette palette=ui->inTelf->palette();
+        palette.setColor(ui->inTelf->backgroundRole(),Qt::green);
+        palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
+        ui->inTelf->setPalette(palette);
+    }
+    //email
+    if(ui->inMail->text().isEmpty()){
+        QPalette palette=ui->inMail->palette();
+        palette.setColor(ui->inMail->backgroundRole(),Qt::red);
+        palette.setColor(ui->inMail->foregroundRole(),Qt::black);
+        ui->inMail->setPalette(palette);
+    }
+    else{
+        QPalette palette=ui->inMail->palette();
+        palette.setColor(ui->inMail->backgroundRole(),Qt::green);
+        palette.setColor(ui->inMail->foregroundRole(),Qt::black);
+        ui->inMail->setPalette(palette);
+    }
+    //direccion
+    if(ui->inDireccion->toPlainText().isEmpty()){
+        QPalette palette=ui->inDireccion->palette();
+        palette.setColor(ui->inDireccion->backgroundRole(),Qt::red);
+        palette.setColor(ui->inDireccion->foregroundRole(),Qt::red);
+        ui->inDireccion->setPalette(palette);
+    }
+    else{
+        QPalette palette=ui->inDireccion->palette();
+        palette.setColor(ui->inDireccion->backgroundRole(),Qt::green);
+        palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
+        ui->inDireccion->setPalette(palette);
+    }
+}
+
+void Tienda::backgroundReset()
+{
+    //CEDULA
+    QPalette palette=ui->inCedula->palette();
+    palette.setColor(ui->inCedula->backgroundRole(),Qt::white);
+    palette.setColor(ui->inCedula->foregroundRole(),Qt::black);
+    ui->inCedula->setPalette(palette);
+    //NOMBRE
+    palette=ui->inNom->palette();
+    palette.setColor(ui->inNom->backgroundRole(),Qt::white);
+    palette.setColor(ui->inNom->foregroundRole(),Qt::black);
+    ui->inNom->setPalette(palette);
+    //TELEFONO
+    palette=ui->inTelf->palette();
+    palette.setColor(ui->inTelf->backgroundRole(),Qt::white);
+    palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
+    ui->inTelf->setPalette(palette);
+    //E-MAIL
+    palette=ui->inMail->palette();
+    palette.setColor(ui->inMail->backgroundRole(),Qt::white);
+    palette.setColor(ui->inMail->foregroundRole(),Qt::black);
+    ui->inMail->setPalette(palette);
+    //DIRECCION
+    palette=ui->inDireccion->palette();
+    palette.setColor(ui->inDireccion->backgroundRole(),Qt::white);
+    palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
+    ui->inDireccion->setPalette(palette);
+
+
+
+}
+
+void Tienda::clearIn()
+{
+    ui->inNom->clear();
+    ui->inCedula->clear();
+    ui->inTelf->clear();
+    ui->inDireccion->clear();
+    ui->inMail->clear();
+}
+
 
 void Tienda::on_inNombre_currentIndexChanged(int index)
 {
@@ -82,5 +204,32 @@ void Tienda::on_btnAgregar_released()
     //calculos
     calcular(subtotal);
 
+}
+
+
+void Tienda::on_pushButton_released()
+{
+    bool condition=false;
+    checkVacios();
+    if(ui->inNom->text().isEmpty()||verificarCedula(ui->inCedula->text())==false){
+     ui->statusbar->showMessage("Datos erroneos!",3500);
+        condition=false;
+    }
+    else{
+         ui->statusbar->showMessage("Confirme los datos ingresados",3500);
+        condition=true;
+
+    }
+    if(condition==true){
+        Finalizacion *finalizar =new Finalizacion(this);
+        //agregar variables
+        //nombre
+        finalizar->insertarDatos(ui->inNom->text(),ui->inCedula->text()
+                                 ,ui->inTelf->text(),ui->inMail->text()
+                                 ,ui->inDireccion->toPlainText());
+        finalizar->exec();
+        clearIn();
+        backgroundReset();
+    }
 }
 

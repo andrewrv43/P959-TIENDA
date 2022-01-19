@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <producto.h>
 #include <QDebug>
+#include <QMessageBox>
+#include <QPalette>
+
+#include "finalizacion.h"
 #define IVA 12
 QT_BEGIN_NAMESPACE
 namespace Ui { class Tienda; }
@@ -22,11 +26,17 @@ private slots:
 
     void on_btnAgregar_released();
 
+    void on_pushButton_released();
+
 private:
     Ui::Tienda *ui;
     QList<Producto*>m_productos;
     void cargarProductos();
     float m_subtotal;
     void calcular(float subtotal);
+    bool verificarCedula(QString as);
+    void checkVacios();
+    void backgroundReset();
+    void clearIn();
 };
 #endif // TIENDA_H
