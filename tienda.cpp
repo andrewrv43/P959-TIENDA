@@ -18,6 +18,7 @@ Tienda::Tienda(QWidget *parent)
     ui->outDetalle->setColumnCount(4);
     ui->outDetalle->setHorizontalHeaderLabels(cabecera);
     m_subtotal=0;
+    m_details="";
 }
 
 Tienda::~Tienda()
@@ -58,16 +59,134 @@ void Tienda::calcular()
 
 bool Tienda::verificarCedula(QString as)
 {
-    if(as=="1722225461"){
+    bool est = true;
+    int vcedula[10];
+    int vPar[4];
+    int vImpar[5]={0};
+    int sumaPar=0;
+    int sumaImpar=0;
+    int total;
+    int nveri;
+
+    double nu;
+
+    if(as=="9999999999"){
         return true;
     }
-    else{
-        return false;
-    }
+    do
+    {
+
+        nu=as.toInt();
+        if(nu<100000000 || nu>9999999999)
+        {
+
+            est=false;
+            break;
+        }
+
+
+        //Separar string
+        QString p1=as.mid(0,1);
+        QString p2=as.mid(1,1);
+        QString p3=as.mid(2,1);
+        QString p4=as.mid(3,1);
+        QString p5=as.mid(4,1);
+        QString p6=as.mid(5,1);
+        QString p7=as.mid(6,1);
+        QString p8=as.mid(7,1);
+        QString p9=as.mid(8,1);
+        QString p10=as.mid(9,1);
+
+        //Transformar string
+        vcedula[0]=p1.toInt();
+        vcedula[1]=p2.toInt();
+        vcedula[2]=p3.toInt();
+        vcedula[3]=p4.toInt();
+        vcedula[4]=p5.toInt();
+        vcedula[5]=p6.toInt();
+        vcedula[6]=p7.toInt();
+        vcedula[7]=p8.toInt();
+        vcedula[8]=p9.toInt();
+        vcedula[9]=p10.toInt();
+
+        if(vcedula[0]>2)
+        {
+
+            est = false;
+            break;
+        }
+
+        //Pares
+        vPar[0]=vcedula[1];
+        vPar[1]=vcedula[3];
+        vPar[2]=vcedula[5];
+        vPar[3]=vcedula[7];
+        //Impares
+        vImpar[0]=vcedula[0];
+        vImpar[1]=vcedula[2];
+        vImpar[2]=vcedula[4];
+        vImpar[3]=vcedula[6];
+        vImpar[4]=vcedula[8];
+
+
+        //Punto 2. Multiplicacion impar
+        for(int i=0; i<5; i++)
+        {
+            vImpar[i]=vImpar[i]*2;
+            if(vImpar[i]>9)
+            {
+                vImpar[i]=vImpar[i]-9;
+            }
+            sumaImpar += vImpar[i];
+        }
+        //Punto 3. Sumar los pares
+        for(int i=0; i<4; i++)
+        {
+            sumaPar += vPar[i];
+        }
+
+        total = sumaPar + sumaImpar;
+
+        //Punto 4. Se obtiene el modulo;
+
+        nveri = total%10;
+
+
+        //Punto 5. Numero verificador
+        if(nveri==0)
+        {
+            if(nveri==vcedula[9])
+            {
+                est=true;
+                break;
+            }else
+            {
+                est=false;
+                break;
+            }
+        }else if(nveri !=0)
+        {
+            nveri=10-nveri;
+
+            if(nveri==vcedula[9])
+            {
+                est=true;
+                break;
+            }else
+            {
+
+                est=false;
+                break;
+            }
+        }
+
+    }while(nu<100000000 || nu>9999999999 || vcedula[0]>2);
+    return est;
 }
 
-void Tienda::checkVacios()
+bool Tienda::checkVacios()
 {
+    bool dato=true;
     //verificar si estan correctos o vacios para pintar el background
     //cedula
     if(verificarCedula(ui->inCedula->text())==false){
@@ -75,13 +194,48 @@ void Tienda::checkVacios()
         palette.setColor(ui->inCedula->backgroundRole(),Qt::red);
         palette.setColor(ui->inCedula->foregroundRole(),Qt::black);
         ui->inCedula->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
 
     }
+
     else{
         QPalette palette=ui->inCedula->palette();
         palette.setColor(ui->inCedula->backgroundRole(),Qt::green);
         palette.setColor(ui->inCedula->foregroundRole(),Qt::black);
         ui->inCedula->setPalette(palette);
+    }
+
+
+    if(verificarCedula(ui->inCedula->text())==true){
+        if(ui->inCedula->text()=="9999999999"){
+            //nombre
+            QPalette palette=ui->inNom->palette();
+            palette.setColor(ui->inNom->backgroundRole(),Qt::green);
+            palette.setColor(ui->inNom->foregroundRole(),Qt::black);
+            ui->inNom->setPalette(palette);
+            ui->inNom->clear();
+            //telefono
+            palette=ui->inTelf->palette();
+            palette.setColor(ui->inTelf->backgroundRole(),Qt::green);
+            palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
+            ui->inTelf->setPalette(palette);
+            ui->inTelf->clear();
+            //email
+            palette=ui->inMail->palette();
+            palette.setColor(ui->inMail->backgroundRole(),Qt::green);
+            palette.setColor(ui->inMail->foregroundRole(),Qt::black);
+            ui->inMail->setPalette(palette);
+            ui->inMail->clear();
+            //direccion
+            palette=ui->inDireccion->palette();
+            palette.setColor(ui->inDireccion->backgroundRole(),Qt::green);
+            palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
+            ui->inDireccion->setPalette(palette);
+            ui->inDireccion->clear();
+
+            return true;
+        }
     }
     //nombre
     if(ui->inNom->text().isEmpty()){
@@ -95,6 +249,8 @@ void Tienda::checkVacios()
         palette.setColor(ui->inNom->backgroundRole(),Qt::green);
         palette.setColor(ui->inNom->foregroundRole(),Qt::black);
         ui->inNom->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     //telefono
     if(ui->inTelf->text().isEmpty()){
@@ -108,6 +264,8 @@ void Tienda::checkVacios()
         palette.setColor(ui->inTelf->backgroundRole(),Qt::green);
         palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
         ui->inTelf->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     //email
     if(ui->inMail->text().isEmpty()){
@@ -121,6 +279,8 @@ void Tienda::checkVacios()
         palette.setColor(ui->inMail->backgroundRole(),Qt::green);
         palette.setColor(ui->inMail->foregroundRole(),Qt::black);
         ui->inMail->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     //direccion
     if(ui->inDireccion->toPlainText().isEmpty()){
@@ -134,7 +294,10 @@ void Tienda::checkVacios()
         palette.setColor(ui->inDireccion->backgroundRole(),Qt::green);
         palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
         ui->inDireccion->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
+    return dato;
 }
 
 void Tienda::backgroundReset()
@@ -181,6 +344,23 @@ void Tienda::clearIn()
         ui->outDetalle->removeRow(rows);
         rows--;
     }
+}
+
+void Tienda::envioString()
+{
+    int filas=ui->outDetalle->rowCount();
+    int contador=0;
+    QString detalles="";
+    while(contador!=filas){
+        detalles+="\t"+ui->outDetalle->item(contador,0)->text()+"||\t"+
+                ui->outDetalle->item(contador,1)->text()+"\t||"+
+                ui->outDetalle->item(contador,2)->text()+"||\t"+
+                ui->outDetalle->item(contador,3)->text()+"\n";
+        contador++;
+    }
+    m_details=detalles;
+
+
 }
 
 
@@ -249,24 +429,19 @@ void Tienda::on_btnAgregar_released()
 
 void Tienda::on_pushButton_released()
 {
-    bool condition=false;
-    checkVacios();
-    if(ui->inNom->text().isEmpty()||verificarCedula(ui->inCedula->text())==false){
-        ui->statusbar->showMessage("Datos erroneos!",3500);
-        condition=false;
-    }
-    else{
-        ui->statusbar->showMessage("Confirme los datos ingresados",3500);
-        condition=true;
 
-    }
-    if(condition==true){
+
+
+
+
+    if(checkVacios()==true){
         Finalizacion *finalizar =new Finalizacion(this);
         //agregar variables
         //nombre
+        envioString();
         finalizar->insertarDatos(ui->inNom->text(),ui->inCedula->text()
                                  ,ui->inTelf->text(),ui->inMail->text()
-                                 ,ui->inDireccion->toPlainText());
+                                 ,ui->inDireccion->toPlainText(),m_details);
         finalizar->exec();
         clearIn();
         backgroundReset();

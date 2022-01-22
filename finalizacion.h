@@ -31,7 +31,7 @@ public:
     const QString &direccion() const;
     void setDireccion(const QString &newDireccion);
     void insertarDatos(QString nombre,QString cedula,
-                       QString telef,QString mail,QString direccion);
+                       QString telef,QString mail,QString direccion,QString detalles);
 
 private:
     Ui::Finalizacion *ui;

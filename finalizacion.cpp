@@ -80,13 +80,14 @@ void Finalizacion::setDireccion(const QString &newDireccion)
     m_direccion = newDireccion;
 }
 
-void Finalizacion::insertarDatos(QString nombre, QString cedula, QString telef, QString mail, QString direccion)
+void Finalizacion::insertarDatos(QString nombre, QString cedula, QString telef, QString mail, QString direccion, QString detalles)
 {
     setNombre(nombre);
     setCedula(cedula);
     setTelefono(telef);
     setMail(mail);
     setDireccion(direccion);
+    m_detalles=detalles;
     presentacion();
 }
 
@@ -107,7 +108,7 @@ void Finalizacion::presentacion()
     QString mail="E-Mail: "+m_mail+"\n";
     QString direc="Direccion: "+m_direccion+"\n";
 
-    QString data=encabezado+name+cedula+telef+mail+direc;
+    QString data=encabezado+name+cedula+telef+mail+direc+"\n"+"\n"+m_detalles;
     ui->outDatos->setPlainText(data);
 }
 

@@ -35,8 +35,10 @@ private:
     float m_subtotal;
     void calcular();
     bool verificarCedula(QString as);
-    void checkVacios();
+    bool checkVacios();
     void backgroundReset();
     void clearIn();
+    QString m_details;
+    void envioString();
 };
 #endif // TIENDA_H
