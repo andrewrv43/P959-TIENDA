@@ -37,9 +37,18 @@ void Tienda::cargarProductos()
     //podria leerse de una base de datos, archivos, incluso de internet
 }
 
-void Tienda::calcular(float subtotal)
+void Tienda::calcular()
 {
-    m_subtotal+=subtotal;
+    int fila=ui->outDetalle->rowCount();
+    int contador=0;
+    float sumatoria=0;
+    while(contador!=fila){
+        sumatoria+=ui->outDetalle->item(contador,3)->text().toDouble();
+        contador++;
+    }
+    m_subtotal=sumatoria;
+
+
     float iva=m_subtotal*IVA/100;
     float total=m_subtotal+iva;
     ui->outSubtotal_13->setText("$ "+QString::number(m_subtotal,'f',2));
@@ -167,6 +176,11 @@ void Tienda::clearIn()
     ui->inTelf->clear();
     ui->inDireccion->clear();
     ui->inMail->clear();
+    int rows=ui->outDetalle->rowCount();
+    while(rows!=-1){
+        ui->outDetalle->removeRow(rows);
+        rows--;
+    }
 }
 
 
@@ -190,19 +204,45 @@ void Tienda::on_btnAgregar_released()
 
     float subtotal=p->precio()*cantidad;
     //agregar datos a la tabla
-    int fila= ui->outDetalle->rowCount();
-    ui->outDetalle->insertRow(fila);
-    ui->outDetalle->setItem(fila,0,new QTableWidgetItem(QString::number(cantidad,'f',2)));
-    ui->outDetalle->setItem(fila,1,new QTableWidgetItem(p->nombre()));
-    ui->outDetalle->setItem(fila,2,new QTableWidgetItem(QString::number(p->precio(),'f',2)));
-    ui->outDetalle->setItem(fila,3,new QTableWidgetItem(QString::number(subtotal,'f',2)));
 
+    int fila= ui->outDetalle->rowCount();
+    bool encontrado=false;
+    int contador=0;
+    if(fila>0){
+        while(encontrado==false&&contador!=fila){
+            QString nombre=ui->outDetalle->item(contador,1)->text();
+            QString comparar=p->nombre();
+
+            if(nombre==comparar){
+                QString antiguaCant=(ui->outDetalle->item(contador,0)->text());
+                int cant=antiguaCant.toDouble();
+
+
+                cantidad+=cant;
+                subtotal=p->precio()*cantidad;
+                ui->outDetalle->setItem(contador,0,new QTableWidgetItem(QString::number(cantidad,'f',2)));
+                ui->outDetalle->setItem(contador,3,new QTableWidgetItem(QString::number(subtotal,'f',2)));
+
+                encontrado=true;
+            }
+            contador++;
+        }
+    }
+    else{}
+    if(encontrado==false){
+        ui->outDetalle->insertRow(fila);
+        ui->outDetalle->setItem(fila,0,new QTableWidgetItem(QString::number(cantidad,'f',2)));
+        ui->outDetalle->setItem(fila,1,new QTableWidgetItem(p->nombre()));
+        ui->outDetalle->setItem(fila,2,new QTableWidgetItem(QString::number(p->precio(),'f',2)));
+        ui->outDetalle->setItem(fila,3,new QTableWidgetItem(QString::number(subtotal,'f',2)));
+
+    }
     //limpiar
     ui->inCantidad->setValue(0);
     ui->inNombre->setFocus();
 
     //calculos
-    calcular(subtotal);
+    calcular();
 
 }
 
@@ -212,11 +252,11 @@ void Tienda::on_pushButton_released()
     bool condition=false;
     checkVacios();
     if(ui->inNom->text().isEmpty()||verificarCedula(ui->inCedula->text())==false){
-     ui->statusbar->showMessage("Datos erroneos!",3500);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
         condition=false;
     }
     else{
-         ui->statusbar->showMessage("Confirme los datos ingresados",3500);
+        ui->statusbar->showMessage("Confirme los datos ingresados",3500);
         condition=true;
 
     }

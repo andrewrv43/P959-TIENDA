@@ -13,11 +13,7 @@ Finalizacion::~Finalizacion()
     delete ui;
 }
 
-void Finalizacion::setDetalles(const QString &newDetalles)
-{
-    m_detalles = newDetalles;
-    ui->outDetalles->setPlainText(m_detalles);
-}
+
 
 Ui::Finalizacion *Finalizacion::getUi() const
 {

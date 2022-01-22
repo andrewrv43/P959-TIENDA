@@ -33,7 +33,7 @@ private:
     QList<Producto*>m_productos;
     void cargarProductos();
     float m_subtotal;
-    void calcular(float subtotal);
+    void calcular();
     bool verificarCedula(QString as);
     void checkVacios();
     void backgroundReset();
