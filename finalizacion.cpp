@@ -6,6 +6,7 @@ Finalizacion::Finalizacion(QWidget *parent) :
     ui(new Ui::Finalizacion)
 {
     ui->setupUi(this);
+    m_acept=false;
 }
 
 Finalizacion::~Finalizacion()
@@ -93,23 +94,87 @@ void Finalizacion::insertarDatos(QString nombre, QString cedula, QString telef, 
 
 void Finalizacion::presentacion()
 {
+    QString data="";
     QString encabezado="\t-------------------------------------------------------------\n\t\tABARROTES SANDY\n"
                        "\t-------------------------------------------------------------\n"
-                       "RUC: 9999999999\n"
-                       "Direccion: Av. y Av. Rumichaca Ñan, Av. Moran Valverde\nQuito 170146\n"
-                       "Numero: (02) 396-2800\n"
+                       "\tRUC: 9999999999\n"
+                       "\tDireccion: Av. y Av. Rumichaca Ñan, Av. Moran \n\tValverde Quito 170146\n"
+                       "\tNumero: (02) 396-2800\n"
                        "\t---------------------------------------------------------\n"
                        "\t\t      CLIENTE\n"
                        "\t---------------------------------------------------------\n";
+  data=encabezado;
+    if(m_cedula!="9999999999"){
+        QString name="\tNombre: "+m_nombre+"\n";
+        QString cedula="\tCedula: "+m_cedula+"\n";
+        QString telef="\tTelefono: "+m_telefono+"\n";
+        QString mail="\tE-Mail: "+m_mail+"\n";
+        QString direc="\tDireccion: "+m_direccion+"\n"
+                                                "\t---------------------------------------------------------\n";
+        data+=name+cedula+telef+mail+direc+"\n"+"\n";
+    }
+    else{
+        QString add="\t\tCONSUMIDOR FINAL\n\n\t---------------------------------------------------------\n";
+        data+=add;
+    }
+    QString pro;
+    pro="\tCant.\tProducto\tP.Unitario\tSubTotal\n"+m_detalles;
 
-    QString name="Nombre: "+m_nombre+"\n";
-    QString cedula="Cedula: "+m_cedula+"\n";
-    QString telef="Telefono: "+m_telefono+"\n";
-    QString mail="E-Mail: "+m_mail+"\n";
-    QString direc="Direccion: "+m_direccion+"\n";
+    data+=pro;
 
-    QString data=encabezado+name+cedula+telef+mail+direc+"\n"+"\n"+m_detalles;
     ui->outDatos->setPlainText(data);
+    calculosString();
 }
 
+void Finalizacion::generacion()
+{
+    QFile archivo("Generador.txt");
+    if(archivo.open(QIODevice::WriteOnly|QIODevice::Text)){
+        QTextStream datosArchivo(&archivo);
+                datosArchivo<<ui->outDatos->toPlainText();
+    }
+    archivo.close();
+}
+
+void Finalizacion::calculosString()
+{
+    QString Subtotales="";
+    float iva=m_subtotal*m_iva/100;
+    Subtotales="\t-------------------------------------------------------------\n"
+               "\t\t\tSubTotal:\t"+QString::number(m_subtotal,'f',2)+"\n"
+               "\t\t\tIVA"+QString::number(m_iva,'f',2)+"%:\t"+QString::number(iva,'f',2)+"\n"
+               "\t\t\tTOTAL:\t"+QString::number(m_subtotal+iva,'f',2);
+    ui->outDatos->appendPlainText(Subtotales);
+
+}
+
+void Finalizacion::setIva(int newIva)
+{
+    m_iva = newIva;
+}
+
+void Finalizacion::setSubtotal(float newSubtotal)
+{
+    m_subtotal = newSubtotal;
+}
+
+float Finalizacion::subtotal() const
+{
+    return m_subtotal;
+}
+
+
+
+void Finalizacion::on_buttonBox_accepted()
+{
+    m_acept=true;
+    generacion();
+}
+
+
+void Finalizacion::on_buttonBox_rejected()
+{
+    //eliminar datos
+
+}
 

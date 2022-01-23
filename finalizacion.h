@@ -1,8 +1,8 @@
 #ifndef FINALIZACION_H
 #define FINALIZACION_H
-
+#include <QDebug>
 #include <QDialog>
-
+#include <QFile>
 namespace Ui {
 class Finalizacion;
 }
@@ -32,6 +32,19 @@ public:
     void setDireccion(const QString &newDireccion);
     void insertarDatos(QString nombre,QString cedula,
                        QString telef,QString mail,QString direccion,QString detalles);
+    bool m_acept;
+
+    float subtotal() const;
+
+    void setSubtotal(float newSubtotal);
+
+    void setIva(int newIva);
+
+private slots:
+    void on_buttonBox_rejected();
+
+public slots:
+    void on_buttonBox_accepted();
 
 private:
     Ui::Finalizacion *ui;
@@ -42,6 +55,11 @@ private:
     QString m_telefono;
     QString m_direccion;
     void presentacion();
+    void generacion();
+    float m_subtotal;
+    void calculosString();
+    int m_iva;
+
 
 };
 

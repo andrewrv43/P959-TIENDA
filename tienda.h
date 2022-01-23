@@ -21,12 +21,15 @@ public:
     Tienda(QWidget *parent = nullptr);
     ~Tienda();
 
+
 private slots:
     void on_inNombre_currentIndexChanged(int index);
 
     void on_btnAgregar_released();
 
     void on_pushButton_released();
+
+    void on_pushButton_2_released();
 
 private:
     Ui::Tienda *ui;
@@ -40,5 +43,7 @@ private:
     void clearIn();
     QString m_details;
     void envioString();
+    void clearOut();
+
 };
 #endif // TIENDA_H

@@ -73,6 +73,7 @@ bool Tienda::verificarCedula(QString as)
     if(as=="9999999999"){
         return true;
     }
+
     do
     {
 
@@ -204,6 +205,7 @@ bool Tienda::checkVacios()
         palette.setColor(ui->inCedula->backgroundRole(),Qt::green);
         palette.setColor(ui->inCedula->foregroundRole(),Qt::black);
         ui->inCedula->setPalette(palette);
+        dato=true;
     }
 
 
@@ -243,14 +245,14 @@ bool Tienda::checkVacios()
         palette.setColor(ui->inNom->backgroundRole(),Qt::red);
         palette.setColor(ui->inNom->foregroundRole(),Qt::black);
         ui->inNom->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     else{
         QPalette palette=ui->inNom->palette();
         palette.setColor(ui->inNom->backgroundRole(),Qt::green);
         palette.setColor(ui->inNom->foregroundRole(),Qt::black);
         ui->inNom->setPalette(palette);
-        ui->statusbar->showMessage("Datos erroneos!",3500);
-        dato=false;
     }
     //telefono
     if(ui->inTelf->text().isEmpty()){
@@ -258,14 +260,14 @@ bool Tienda::checkVacios()
         palette.setColor(ui->inTelf->backgroundRole(),Qt::red);
         palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
         ui->inTelf->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     else{
         QPalette palette=ui->inTelf->palette();
         palette.setColor(ui->inTelf->backgroundRole(),Qt::green);
         palette.setColor(ui->inTelf->foregroundRole(),Qt::black);
         ui->inTelf->setPalette(palette);
-        ui->statusbar->showMessage("Datos erroneos!",3500);
-        dato=false;
     }
     //email
     if(ui->inMail->text().isEmpty()){
@@ -273,29 +275,29 @@ bool Tienda::checkVacios()
         palette.setColor(ui->inMail->backgroundRole(),Qt::red);
         palette.setColor(ui->inMail->foregroundRole(),Qt::black);
         ui->inMail->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     else{
         QPalette palette=ui->inMail->palette();
         palette.setColor(ui->inMail->backgroundRole(),Qt::green);
         palette.setColor(ui->inMail->foregroundRole(),Qt::black);
         ui->inMail->setPalette(palette);
-        ui->statusbar->showMessage("Datos erroneos!",3500);
-        dato=false;
     }
     //direccion
     if(ui->inDireccion->toPlainText().isEmpty()){
         QPalette palette=ui->inDireccion->palette();
         palette.setColor(ui->inDireccion->backgroundRole(),Qt::red);
-        palette.setColor(ui->inDireccion->foregroundRole(),Qt::red);
+        palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
         ui->inDireccion->setPalette(palette);
+        ui->statusbar->showMessage("Datos erroneos!",3500);
+        dato=false;
     }
     else{
         QPalette palette=ui->inDireccion->palette();
         palette.setColor(ui->inDireccion->backgroundRole(),Qt::green);
         palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
         ui->inDireccion->setPalette(palette);
-        ui->statusbar->showMessage("Datos erroneos!",3500);
-        dato=false;
     }
     return dato;
 }
@@ -327,9 +329,6 @@ void Tienda::backgroundReset()
     palette.setColor(ui->inDireccion->backgroundRole(),Qt::white);
     palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
     ui->inDireccion->setPalette(palette);
-
-
-
 }
 
 void Tienda::clearIn()
@@ -344,6 +343,8 @@ void Tienda::clearIn()
         ui->outDetalle->removeRow(rows);
         rows--;
     }
+
+
 }
 
 void Tienda::envioString()
@@ -351,15 +352,23 @@ void Tienda::envioString()
     int filas=ui->outDetalle->rowCount();
     int contador=0;
     QString detalles="";
+
     while(contador!=filas){
-        detalles+="\t"+ui->outDetalle->item(contador,0)->text()+"||\t"+
-                ui->outDetalle->item(contador,1)->text()+"\t||"+
-                ui->outDetalle->item(contador,2)->text()+"||\t"+
+        detalles+="\t"+ui->outDetalle->item(contador,0)->text()+"\t"+
+                ui->outDetalle->item(contador,1)->text()+"\t"+
+                ui->outDetalle->item(contador,2)->text()+"\t"+
                 ui->outDetalle->item(contador,3)->text()+"\n";
         contador++;
     }
     m_details=detalles;
 
+
+}
+
+void Tienda::clearOut()
+{    ui->outSubtotal_13->setText("0.00");
+     ui->outIva->setText("0.00");
+     ui->outTotal->setText("0.00");
 
 }
 
@@ -429,22 +438,32 @@ void Tienda::on_btnAgregar_released()
 
 void Tienda::on_pushButton_released()
 {
-
-
-
-
-
     if(checkVacios()==true){
         Finalizacion *finalizar =new Finalizacion(this);
         //agregar variables
         //nombre
         envioString();
+        finalizar->setIva(IVA);
+        finalizar->setSubtotal(m_subtotal);
         finalizar->insertarDatos(ui->inNom->text(),ui->inCedula->text()
                                  ,ui->inTelf->text(),ui->inMail->text()
                                  ,ui->inDireccion->toPlainText(),m_details);
+
         finalizar->exec();
-        clearIn();
+        if(finalizar->m_acept==true){
+            clearIn();
+            clearOut();
+        }
         backgroundReset();
     }
+}
+
+
+void Tienda::on_pushButton_2_released()
+{
+    clearIn();
+    clearOut();
+    ui->inNom->setFocus();
+    backgroundReset();
 }
 
