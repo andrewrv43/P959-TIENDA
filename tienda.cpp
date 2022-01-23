@@ -368,7 +368,7 @@ void Tienda::envioString()
 void Tienda::clearOut()
 {    ui->outSubtotal_13->setText("0.00");
      ui->outIva->setText("0.00");
-     ui->outTotal->setText("0.00");
+      ui->outTotal->setText("0.00");
 
 }
 
@@ -465,5 +465,12 @@ void Tienda::on_pushButton_2_released()
     clearOut();
     ui->inNom->setFocus();
     backgroundReset();
+}
+
+
+void Tienda::on_actionAcerca_de_TiendaP59_triggered()
+{
+    AcercaDe *acerca=new AcercaDe(this);
+    acerca->exec();
 }
 

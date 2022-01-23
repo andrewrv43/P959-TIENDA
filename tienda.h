@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QPalette>
-
+#include "acercade.h"
 #include "finalizacion.h"
 #define IVA 12
 QT_BEGIN_NAMESPACE
@@ -30,6 +30,8 @@ private slots:
     void on_pushButton_released();
 
     void on_pushButton_2_released();
+
+    void on_actionAcerca_de_TiendaP59_triggered();
 
 private:
     Ui::Tienda *ui;
