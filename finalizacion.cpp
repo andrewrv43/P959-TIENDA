@@ -94,31 +94,31 @@ void Finalizacion::insertarDatos(QString nombre, QString cedula, QString telef, 
 
 void Finalizacion::presentacion()
 {
-    QString data="";
-    QString encabezado="\t-------------------------------------------------------------\n\t\tABARROTES SANDY\n"
+     QString data="";
+    QString encabezado="\t-------------------------------------------------------------\n\t\t"+tr("ABARROTES SANDY")+"\n"
                        "\t-------------------------------------------------------------\n"
                        "\tRUC: 9999999999\n"
-                       "\tDireccion: Av. y Av. Rumichaca Ñan, Av. Moran \n\tValverde Quito 170146\n"
-                       "\tNumero: (02) 396-2800\n"
+                       "\t"+tr("Direccion")+": Av. y Av. Rumichaca Ñan, Av. Moran \n\tValverde Quito 170146\n"
+                       "\t"+tr("Numero")+": (02) 396-2800\n"
                        "\t---------------------------------------------------------\n"
-                       "\t\t      CLIENTE\n"
+                       "\t\t      "+tr("CLIENTE")+"\n"
                        "\t---------------------------------------------------------\n";
   data=encabezado;
     if(m_cedula!="9999999999"){
-        QString name="\tNombre: "+m_nombre+"\n";
-        QString cedula="\tCedula: "+m_cedula+"\n";
-        QString telef="\tTelefono: "+m_telefono+"\n";
+        QString name="\t"+tr("Nombre")+": "+m_nombre+"\n";
+        QString cedula="\t"+tr("Cedula")+": "+m_cedula+"\n";
+        QString telef="\t"+tr("Telefono")+": "+m_telefono+"\n";
         QString mail="\tE-Mail: "+m_mail+"\n";
-        QString direc="\tDireccion: "+m_direccion+"\n"
+        QString direc="\t"+tr("Direccion")+": "+m_direccion+"\n"
                                                 "\t---------------------------------------------------------\n";
         data+=name+cedula+telef+mail+direc+"\n"+"\n";
     }
     else{
-        QString add="\t\tCONSUMIDOR FINAL\n\n\t---------------------------------------------------------\n";
+        QString add="\t\t"+tr("CONSUMIDOR FINAL")+"\n\n\t---------------------------------------------------------\n";
         data+=add;
     }
     QString pro;
-    pro="\tCant.\tProducto\tP.Unitario\tSubTotal\n"+m_detalles;
+    pro="\t"+tr("Cant")+".\t"+tr("Producto")+"\t"+tr("P.Unitario")+"\tSubTotal\n"+m_detalles;
 
     data+=pro;
 
@@ -128,7 +128,8 @@ void Finalizacion::presentacion()
 
 void Finalizacion::generacion()
 {
-    QFile archivo("Generador.txt");
+    QString fechaH=QDateTime::currentDateTime().toString("ddMMyyyy-hh:mm:ss");
+    QFile archivo(fechaH+".txt");
     if(archivo.open(QIODevice::WriteOnly|QIODevice::Text)){
         QTextStream datosArchivo(&archivo);
                 datosArchivo<<ui->outDatos->toPlainText();

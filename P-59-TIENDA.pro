@@ -25,6 +25,9 @@ FORMS += \
     acercade.ui \
     finalizacion.ui \
     tienda.ui
+TRANSLATIONS =\
+    Tienda_en.ts
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

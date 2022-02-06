@@ -6,19 +6,27 @@ Tienda::Tienda(QWidget *parent)
     , ui(new Ui::Tienda)
 {
     ui->setupUi(this);
-
+    ui->inTelf->setValidator(new QIntValidator(0, 999999999, this) );
+    /**
+     * @brief tienda.cpp:10:53: warning: implicit conversion from 'long' to 'int' changes value from 9999999999 to 1410065407
+     */
+    ui->inCedula->setValidator(new QIntValidator(0, 1410065407, this) );
     //lista de productos
     cargarProductos();
     //mostrar productos en el combo
     foreach(Producto *p, m_productos){
         ui->inNombre->addItem(p->nombre());
     }
+    //ordenar productos(se ordena el nombre pero los precios y su codigo no cambia por lo que salen los precios de otros productos)
+    //ui->inNombre->model()->sort(0,Qt::AscendingOrder);
+
     //configurar cabecera de la tabla
     QStringList cabecera={"Cantidad","Producto","P.Unitario","SubTotal"};
     ui->outDetalle->setColumnCount(4);
     ui->outDetalle->setHorizontalHeaderLabels(cabecera);
     m_subtotal=0;
     m_details="";
+
 }
 
 Tienda::~Tienda()
@@ -32,9 +40,10 @@ Tienda::~Tienda()
 void Tienda::cargarProductos()
 {
     //crear productos quemados en el codigo
-    m_productos.append(new Producto(1,"Leche",0.80));
-    m_productos.append(new Producto(2,"Pan",0.15));
+    m_productos.append(new Producto(1,"Pan",0.15));
+    m_productos.append(new Producto(2,"Leche",0.80));
     m_productos.append(new Producto(3,"Queso",2.50));
+    m_productos.append(new Producto(4,"Arroz",0.50));
     //podria leerse de una base de datos, archivos, incluso de internet
 }
 
@@ -189,7 +198,9 @@ bool Tienda::checkVacios()
 {
     bool dato=true;
     //verificar si estan correctos o vacios para pintar el background
+
     //cedula
+
     if(verificarCedula(ui->inCedula->text())==false){
         QPalette palette=ui->inCedula->palette();
         palette.setColor(ui->inCedula->backgroundRole(),Qt::red);
@@ -235,8 +246,18 @@ bool Tienda::checkVacios()
             palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
             ui->inDireccion->setPalette(palette);
             ui->inDireccion->clear();
+            dato =true;
+            if(ui->outDetalle->rowCount()==0){
+                if(dato==false){
+                    ui->statusbar->showMessage("No ha ingresado ningun producto!, Datos erroneos",4500);
+                }
+                else{
+                    ui->statusbar->showMessage("No ha ingresado ningun producto!",4500);
+                    dato=false;
+                }
+            }
 
-            return true;
+            return dato;
         }
     }
     //nombre
@@ -299,6 +320,15 @@ bool Tienda::checkVacios()
         palette.setColor(ui->inDireccion->foregroundRole(),Qt::black);
         ui->inDireccion->setPalette(palette);
     }
+    if(ui->outDetalle->rowCount()==0){
+        if(dato==false){
+            ui->statusbar->showMessage("No ha ingresado ningun producto!, Datos erroneos",4500);
+        }
+        else{
+            ui->statusbar->showMessage("No ha ingresado ningun producto!",4500);
+        }
+        return false;
+    }
     return dato;
 }
 
@@ -343,8 +373,6 @@ void Tienda::clearIn()
         ui->outDetalle->removeRow(rows);
         rows--;
     }
-
-
 }
 
 void Tienda::envioString()
@@ -368,10 +396,9 @@ void Tienda::envioString()
 void Tienda::clearOut()
 {    ui->outSubtotal_13->setText("0.00");
      ui->outIva->setText("0.00");
-      ui->outTotal->setText("0.00");
+     ui->outTotal->setText("0.00");
 
 }
-
 
 void Tienda::on_inNombre_currentIndexChanged(int index)
 {
@@ -379,7 +406,6 @@ void Tienda::on_inNombre_currentIndexChanged(int index)
     ui->outPrecio->setText(QString::number(precio,'f',2));
     ui->inCantidad->setValue(0);
 }
-
 
 void Tienda::on_btnAgregar_released()
 {
@@ -435,7 +461,6 @@ void Tienda::on_btnAgregar_released()
 
 }
 
-
 void Tienda::on_pushButton_released()
 {
     if(checkVacios()==true){
@@ -458,15 +483,16 @@ void Tienda::on_pushButton_released()
     }
 }
 
-
 void Tienda::on_pushButton_2_released()
 {
     clearIn();
     clearOut();
     ui->inNom->setFocus();
     backgroundReset();
-}
 
+
+
+}
 
 void Tienda::on_actionAcerca_de_TiendaP59_triggered()
 {

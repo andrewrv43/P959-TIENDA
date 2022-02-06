@@ -8,6 +8,7 @@
 #include <QPalette>
 #include "acercade.h"
 #include "finalizacion.h"
+#include <QDateTime>
 #define IVA 12
 QT_BEGIN_NAMESPACE
 namespace Ui { class Tienda; }

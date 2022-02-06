@@ -1,8 +1,11 @@
+
 #ifndef FINALIZACION_H
 #define FINALIZACION_H
 #include <QDebug>
+#include <QTranslator>
 #include <QDialog>
 #include <QFile>
+#include <QDateTime>
 namespace Ui {
 class Finalizacion;
 }
