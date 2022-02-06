@@ -204,5 +204,40 @@
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
+    <message>
+        <location filename="tienda.cpp" line="24"/>
+        <source>Cantidad</source>
+        <translation>Amount</translation>
+    </message>
+    <message>
+        <location filename="tienda.cpp" line="24"/>
+        <source>Producto</source>
+        <translation>Product</translation>
+    </message>
+    <message>
+        <location filename="tienda.cpp" line="24"/>
+        <source>P.Unitario</source>
+        <translation>U.Price</translation>
+    </message>
+    <message>
+        <location filename="tienda.cpp" line="43"/>
+        <source>Pan</source>
+        <translation>Bread</translation>
+    </message>
+    <message>
+        <location filename="tienda.cpp" line="44"/>
+        <source>Leche</source>
+        <translation>Milk</translation>
+    </message>
+    <message>
+        <location filename="tienda.cpp" line="45"/>
+        <source>Queso</source>
+        <translation>Cheese</translation>
+    </message>
+    <message>
+        <location filename="tienda.cpp" line="46"/>
+        <source>Arroz</source>
+        <translation>Rice</translation>
+    </message>
 </context>
 </TS>

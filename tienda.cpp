@@ -21,7 +21,7 @@ Tienda::Tienda(QWidget *parent)
     //ui->inNombre->model()->sort(0,Qt::AscendingOrder);
 
     //configurar cabecera de la tabla
-    QStringList cabecera={"Cantidad","Producto","P.Unitario","SubTotal"};
+    QStringList cabecera={tr("Cantidad"),tr("Producto"),tr("P.Unitario"),"SubTotal"};
     ui->outDetalle->setColumnCount(4);
     ui->outDetalle->setHorizontalHeaderLabels(cabecera);
     m_subtotal=0;
@@ -40,10 +40,10 @@ Tienda::~Tienda()
 void Tienda::cargarProductos()
 {
     //crear productos quemados en el codigo
-    m_productos.append(new Producto(1,"Pan",0.15));
-    m_productos.append(new Producto(2,"Leche",0.80));
-    m_productos.append(new Producto(3,"Queso",2.50));
-    m_productos.append(new Producto(4,"Arroz",0.50));
+    m_productos.append(new Producto(1,tr("Pan"),0.15));
+    m_productos.append(new Producto(2,tr("Leche"),0.80));
+    m_productos.append(new Producto(3,tr("Queso"),2.50));
+    m_productos.append(new Producto(4,tr("Arroz"),0.50));
     //podria leerse de una base de datos, archivos, incluso de internet
 }
 
