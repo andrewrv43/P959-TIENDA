@@ -3,5 +3,8 @@
         <file>Recursos/store.png</file>
         <file>Tienda_en.qm</file>
         <file>Tienda_de.qm</file>
+        <file>Recursos/papelera-de-reciclaje.png</file>
+        <file>Recursos/carrito-de-compras.png</file>
+        <file>Recursos/verificar.png</file>
     </qresource>
 </RCC>
