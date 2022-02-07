@@ -17,11 +17,11 @@ class Finalizacion : public QDialog
 public:
     explicit Finalizacion(QWidget *parent = nullptr);
     ~Finalizacion();
+    Ui::Finalizacion *getUi() const;
 
+    void setUi(Ui::Finalizacion *newUi);
     void setDetalles(const QString &newDetalles);
 
-    Ui::Finalizacion *getUi() const;
-    void setUi(Ui::Finalizacion *newUi);
     const QString &detalles() const;
     const QString &nombre() const;
     void setNombre(const QString &newNombre);
@@ -57,11 +57,11 @@ private:
     QString m_mail;
     QString m_telefono;
     QString m_direccion;
+    int m_iva;
+    float m_subtotal;
     void presentacion();
     void generacion();
-    float m_subtotal;
     void calculosString();
-    int m_iva;
 
 
 };

@@ -27,3 +27,19 @@ signals:
 };
 
 #endif // PRODUCTO_H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

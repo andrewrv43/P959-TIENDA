@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Recursos/store.png</file>
         <file>Tienda_en.qm</file>
+        <file>Tienda_de.qm</file>
     </qresource>
 </RCC>

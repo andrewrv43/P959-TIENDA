@@ -443,7 +443,7 @@ void Tienda::on_btnAgregar_released()
             contador++;
         }
     }
-    else{}
+
     if(encontrado==false){
         ui->outDetalle->insertRow(fila);
         ui->outDetalle->setItem(fila,0,new QTableWidgetItem(QString::number(cantidad,'f',2)));

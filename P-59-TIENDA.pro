@@ -25,8 +25,9 @@ FORMS += \
     acercade.ui \
     finalizacion.ui \
     tienda.ui
-TRANSLATIONS =\
-    Tienda_en.ts
+TRANSLATIONS +=\
+    Tienda_en.ts\
+    Tienda_de.ts
 
 
 # Default rules for deployment.

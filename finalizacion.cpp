@@ -94,23 +94,23 @@ void Finalizacion::insertarDatos(QString nombre, QString cedula, QString telef, 
 
 void Finalizacion::presentacion()
 {
-     QString data="";
+    QString data="";
     QString encabezado="\t-------------------------------------------------------------\n\t\t"+tr("ABARROTES SANDY")+"\n"
-                       "\t-------------------------------------------------------------\n"
-                       "\tRUC: 9999999999\n"
-                       "\t"+tr("Direccion")+": Av. y Av. Rumichaca Ñan, Av. Moran \n\tValverde Quito 170146\n"
-                       "\t"+tr("Numero")+": (02) 396-2800\n"
-                       "\t---------------------------------------------------------\n"
-                       "\t\t      "+tr("CLIENTE")+"\n"
-                       "\t---------------------------------------------------------\n";
-  data=encabezado;
+                                                                                                                     "\t-------------------------------------------------------------\n"
+                                                                                                                     "\tRUC: 9999999999\n"
+                                                                                                                     "\t"+tr("Direccion")+": Av. y Av. Rumichaca Ñan, Av. Moran \n\tValverde Quito 170146\n"
+                                                                                                                                          "\t"+tr("Numero")+": (02) 396-2800\n"
+                                                                                                                                                            "\t---------------------------------------------------------\n"
+                                                                                                                                                            "\t\t      "+tr("CLIENTE")+"\n"
+                                                                                                                                                                                       "\t---------------------------------------------------------\n";
+    data=encabezado;
     if(m_cedula!="9999999999"){
         QString name="\t"+tr("Nombre")+": "+m_nombre+"\n";
         QString cedula="\t"+tr("Cedula")+": "+m_cedula+"\n";
         QString telef="\t"+tr("Telefono")+": "+m_telefono+"\n";
         QString mail="\tE-Mail: "+m_mail+"\n";
         QString direc="\t"+tr("Direccion")+": "+m_direccion+"\n"
-                                                "\t---------------------------------------------------------\n";
+                                                            "\t---------------------------------------------------------\n";
         data+=name+cedula+telef+mail+direc+"\n"+"\n";
     }
     else{
@@ -119,9 +119,7 @@ void Finalizacion::presentacion()
     }
     QString pro;
     pro="\t"+tr("Cant")+".\t"+tr("Producto")+"\t"+tr("P.Unitario")+"\tSubTotal\n"+m_detalles;
-
     data+=pro;
-
     ui->outDatos->setPlainText(data);
     calculosString();
 }
@@ -132,7 +130,7 @@ void Finalizacion::generacion()
     QFile archivo(fechaH+".txt");
     if(archivo.open(QIODevice::WriteOnly|QIODevice::Text)){
         QTextStream datosArchivo(&archivo);
-                datosArchivo<<ui->outDatos->toPlainText();
+        datosArchivo<<ui->outDatos->toPlainText();
     }
     archivo.close();
 }
@@ -143,8 +141,8 @@ void Finalizacion::calculosString()
     float iva=m_subtotal*m_iva/100;
     Subtotales="\t-------------------------------------------------------------\n"
                "\t\t\tSubTotal:\t"+QString::number(m_subtotal,'f',2)+"\n"
-               "\t\t\tIVA"+QString::number(m_iva,'f',2)+"%:\t"+QString::number(iva,'f',2)+"\n"
-               "\t\t\tTOTAL:\t"+QString::number(m_subtotal+iva,'f',2);
+                                                                     "\t\t\tIVA"+QString::number(m_iva,'f',2)+"%:\t"+QString::number(iva,'f',2)+"\n"
+                                                                                                                                                "\t\t\tTOTAL:\t"+QString::number(m_subtotal+iva,'f',2);
     ui->outDatos->appendPlainText(Subtotales);
 
 }
